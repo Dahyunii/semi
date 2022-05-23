@@ -142,7 +142,9 @@ public class ProductBoardController extends HttpServlet {
 		// 게시글 삭제하기	
 		} else if(uri.equals("/delete.productBoard")) {
 			int seq = Integer.parseInt(request.getParameter("seq"));
+			System.out.println(seq);
 			int result = dao.delete(seq);
+			int result2 = dao2.deleteAll(seq);
 			
 			response.sendRedirect("/list.productBoard?currPage=1");
 			
