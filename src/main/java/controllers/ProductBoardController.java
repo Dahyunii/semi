@@ -124,25 +124,6 @@ public class ProductBoardController extends HttpServlet {
 			
 			response.sendRedirect("/list.productBoard?currPage=1");
 		
-		// 게시글 50개 작성
-		} else if(uri.equals("/insert50.productBoard")) {
-			int seq = 0;
-			String title = null;
-			String contents = null;
-			String writer = (String)request.getSession().getAttribute("loginId");
-			String pname = null;
-			int price = 0;
-			String category = null;
-			String sellingOption = null;
-			String status = null;
-			int viewCount = 0;
-			Timestamp writeDate = null;
-			
-			dao.insert50(new ProductBoardDTO(seq, title, contents, writer, pname, price, category, sellingOption,
-						status, viewCount, writeDate));
-			
-			response.sendRedirect("/list.productBoard?currPage=1");
-			
 		// 게시글 내용 보기 - 게시글의 내용, 댓글, 첨부파일 가져오기
 		} else if(uri.equals("/detail.productBoard")) {
 			int seq = Integer.parseInt(request.getParameter("seq"));

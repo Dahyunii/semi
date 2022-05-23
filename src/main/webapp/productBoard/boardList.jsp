@@ -60,7 +60,6 @@
             <td colspan="5" align="right">
             	<a href="/index.jsp"><button>메인으로</button></a>
             	<a href="/write.productBoard"><button>작성하기</button></a>
-            	<a href="/insert50.productBoard"><button>글 50개 작성하기</button></a>
         </tr>
     </table>
     

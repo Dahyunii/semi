@@ -66,30 +66,6 @@ public class ProductBoardDAO {
 		return rs.getInt(1); }
 	}
 	
-	// 게시글 50개 입력
-	public void insert50(ProductBoardDTO dto) throws Exception {
-		String sql = "insert into board values(board_seq.nextval,?,?,?,?,?,?,?,?,?,default)";
-		
-		try (
-		Connection con = getConnection();
-		PreparedStatement stat = con.prepareStatement(sql); ){
-			
-		for(int i=1; i<=50; i++) {
-		stat.setString(1, i + "번 글");
-		stat.setString(2, i + "번 글 내용");
-		stat.setString(3, dto.getWriter());
-		stat.setString(4, i + "번 글 상품이름");
-		stat.setInt(5, i);
-		stat.setString(6, i + "번 카테고리");
-		stat.setInt(7, i);
-		stat.setInt(8, i);
-		stat.setInt(9, i);
-		stat.executeUpdate();
-		}
-		
-		con.commit(); }
-	}
-	
 	// 게시글 목록 출력
 	public List<ProductBoardDTO> getBoardList(int currPage) throws Exception {
 		String sql = "select * from (select row_number() over(order by seq desc) row_num, board.* from board) where row_num between ? and ?";
