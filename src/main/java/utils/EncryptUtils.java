@@ -1,26 +1,24 @@
 package utils;
 
+import java.math.BigInteger;
 import java.security.MessageDigest;
 
 public class EncryptUtils {
 
-	public static String SHA512(String pwd) {
-		try{
+	public static String SHA512(String input) throws Exception {
 
+		String toReturn = null;
+		try {
 			MessageDigest digest = MessageDigest.getInstance("SHA-512");
-			byte[] hash = digest.digest(pwd.getBytes("UTF-8"));
-			StringBuffer hexString = new StringBuffer();
+			digest.reset();
+			digest.update(input.getBytes("utf8"));
+			toReturn = String.format("%0128x", new BigInteger(1, digest.digest()));
+		} catch (Exception e) {
 
-			for (int i = 0; i < hash.length; i++) {
-				String hex = Integer.toHexString(0xff & hash[i]);
-				if(hex.length() == 1) hexString.append('0');
-				hexString.append(hex);
-			}
-			return hexString.toString();
-			
-		} catch(Exception ex){
-			throw new RuntimeException(ex);
 		}
+
+		return toReturn;
+
 	}
-	
+
 }

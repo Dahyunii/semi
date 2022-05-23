@@ -13,6 +13,59 @@
 	*{box-sizing:border-box;}
 	table button{width:100%;}
 	body{margin:0; padding:0;}
+	
+	
+        #board{
+            position:relative;
+        }
+
+        .econ{
+            width:75px;
+            margin:15px;
+        }
+        .econ:hover{
+            cursor:pointer;
+        }
+
+        #result>div>div{
+            border-radius: 7px;
+            background-color:white;
+            color: black;
+            margin:12px;
+            padding:10px;
+            display:inline-block;
+            max-width:50%;
+
+            word-break: break-all;
+        }
+
+        #input{
+            border:1px solid black;
+            height:100%;
+            overflow: auto;
+        }
+
+        #inputBox{
+            overflow: hidden;
+        }
+        
+        #inputBox>div{
+            float:left;
+        }
+        
+        #result{
+            overflow-y: scroll;
+        }
+        #result::-webkit-scrollbar {
+          width: 9px;
+        }
+        #result::-webkit-scrollbar-track {
+          background-color: transparent;
+        }
+        #result::-webkit-scrollbar-thumb {
+          border-radius: 10px;
+          background-color: pink;
+        }
 
 </style>
 </head>
@@ -35,6 +88,26 @@
 		<tr>
 		<td align=center><button id="memberOut">MemberOut</button>
 	</table>
+	
+	<br><br>
+	
+	<!-- 로그인시 다중채팅창 -->
+	<div id="board" style="width:400px; height:450px; margin:auto;">
+        
+        <div id="result" style="height:80%; background-color: darkcyan;">
+            
+        </div>
+        
+        <div id="inputBox" style="height:20%;">
+            <div id="input" contenteditable="true" style="width:75%; padding-left:7px; padding-top:7px; outline:0px;"></div>
+            <div style="width:25%; height:100%;">
+                <button id="send" style="width:100%; height:100%;">
+                    Send
+                </button>
+            </div>
+        </div>
+    </div>
+	
     
     </c:when>
     
@@ -92,8 +165,10 @@
 	<br><br>
 	
 	
+	
+	
+	
 	<table id=productTable align=center>
-		
 		
 	
 	</table>
@@ -152,6 +227,79 @@
 				  }
 				})
 		})
+		
+		
+		// 로그인 성공시 다중채팅창 띄우기 (웹소켓 접속)
+		if("${isLoginOk}" == 1) {
+			let webSocket = new WebSocket("ws://218.144.199.10/multi.chat")
+
+	        let messageTextArea = document.getElementById("result")
+
+	        webSocket.onopen = function(message) {
+				$("#result").append("<div><div style='background-color:white;'>우리동네 채팅방이에요.<br>반갑게 인사해보세요!");
+                $("#input").html("");
+                $("#input").focus();
+	        }
+
+	        webSocket.onclose = function(message) {
+	            messageTextArea.innerHTML += message.code + ""
+	            messageTextArea.innerHTML += "Server is now Disconnected...\n"
+	        }
+
+	        webSocket.onerror = function(message) {
+	            messageTextArea.innerHTML += "error...\n"
+	        }
+
+	        webSocket.onmessage = function(message) {
+	        	let result = message.data.split("!%!")
+	        	$("#result").append("<div style='color:white; margin-bottom:-6px;'>&nbsp;&nbsp;&nbsp;" + result[0] + "</div><div><div>" + result[1]);
+                $("#result").scrollTop($("#result").prop("scrollHeight"));
+	        }
+
+			document.getElementById("send").addEventListener("click", function(){
+				let user = "${loginId }"
+		        let message = $("#input").text()
+				
+		        if(message != "") {
+	    			$("#result").append("<div style='text-align:right;'><div style='text-align:left; background-color:lemonchiffon;'>" + message);
+	                $("#input").text("");
+	                $("#input").focus();
+	                $("#result").scrollTop($("#result").prop("scrollHeight"));
+	                    
+	    	        webSocket.send("{{" + user + "}}" + message)
+	    	        message = ""
+	    		} else {
+	    			return false
+	    		}
+	        })
+
+	        document.getElementById("input").addEventListener("keyup", function(e){
+	        	if(e.which == 13) {
+	        		let user = "${loginId }"
+	    		    let message = $("#input").text()
+	    		    
+	    		    if(message != "") {
+	    				$("#result").append("<div style='text-align:right;'><div style='text-align:left; background-color:lemonchiffon;'>" + message);
+	                	$("#input").text("");
+	                	$("#input").focus();
+	                	$("#result").scrollTop($("#result").prop("scrollHeight"));
+	                    
+	    	        	webSocket.send("{{" + user + "}}" + message)
+	    	        	message = ""
+	    		    } else {
+	    		    	return false
+	    		    }
+	        	}
+	        })
+	        
+// 	        document.getElementById("disconnect").addEventListener("click", function(){
+// 	            webSocket.close()
+// 	        })
+			
+		}
+		
+		
+		
 		
 		
 		
