@@ -209,6 +209,13 @@
         <c:if test="${BoardDTO.writer eq loginId }">
         	<button type=button id=updateBtn>수정하기</button> 
         	<a href="/delete.productBoard?seq=${BoardDTO.seq }"><button type=button id=deleteBtn>삭제하기</button></a>
+        	
+        </c:if>
+        
+        <!-- 채팅하기 -->
+        <c:if test="${BoardDTO.writer ne loginId }">
+        	 
+        	<a href="/chatWith.chat?with=${BoardDTO.writer}"><button type=button id=chatBtn>채팅하기</button></a>
         </c:if>
         
         

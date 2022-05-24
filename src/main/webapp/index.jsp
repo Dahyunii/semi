@@ -87,6 +87,8 @@
 		<td align=center><button id=logout>Logout</button> 
 		<tr>
 		<td align=center><button id="memberOut">MemberOut</button>
+		<tr>
+		<td align=center><button id="chatRoom">채팅함</button>
 	</table>
 	
 	<br><br>
@@ -427,9 +429,28 @@
     				})
     			}
   			})
+  			
+  			
+  			
+  			// 채팅
+			$("#chatRoom").on("click",function(){
+				location.href = "/chatRoom.chat?loginId=${loginId}";
+			})
+		
+			$.ajax({
+    			url:"/notice.chat",
+    			data:{loginId:"${loginId}"},
+    			dataType:"json"	
+    		}).done(function(resp){
+    			if(resp > 0){
+    				$("#chatRoom").append("New").css("color","red")
+ 
+    			}
+    		})
 		
 		
 		})
+		
 		
 		
 	
