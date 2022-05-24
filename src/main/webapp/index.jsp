@@ -96,6 +96,7 @@
         
         <div id="result" style="height:80%; background-color: darkcyan;">
             
+            
         </div>
         
         <div id="inputBox" style="height:20%;">
@@ -231,12 +232,33 @@
 		
 		// 로그인 성공시 다중채팅창 띄우기 (웹소켓 접속)
 		if("${isLoginOk}" == 1) {
-			let webSocket = new WebSocket("ws://218.144.199.10/multi.chat")
+			let webSocket = new WebSocket("ws://localhost/multi.chat")
 
 	        let messageTextArea = document.getElementById("result")
 
 	        webSocket.onopen = function(message) {
-				$("#result").append("<div><div style='background-color:white;'>우리동네 채팅방이에요.<br>반갑게 인사해보세요!");
+				
+				// 다중채팅창의 기존 메시지 (최대 100개) 를 우선 출력한다.
+				$.ajax({
+					url : "/list.multichatAjax",
+					type : "post",
+					dataType : "json"
+				}).done(function(list){
+					for(let i=0; i<list.length; i++) {
+						
+						if(list[i].writer == "${loginId}") {
+							$("#result").append("<div style='text-align:right;'><div style='text-align:left; background-color:lemonchiffon;'>" + list[i].contents);
+						
+						} else {
+							$("#result").append("<div style='color:white; margin-bottom:-6px;'>&nbsp;&nbsp;&nbsp;" + list[i].writer + "</div><div><div>" + list[i].contents);
+							
+						}
+						
+						$("#result").scrollTop($("#result").prop("scrollHeight"));
+						
+					}
+				})
+				
                 $("#input").html("");
                 $("#input").focus();
 	        }
@@ -304,7 +326,7 @@
 		
 		
 		$(function(){
-
+			
 			// 무한 스크롤
 			
 			// 메인 로드시 기본 5개

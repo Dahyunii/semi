@@ -32,7 +32,7 @@ public class ProductBoardDAO {
 	// 게시글 등록
 	// 첨부파일 때문에 getParentSeq 메서드를 사용하므로 seq 에 nextval 이 아닌 받아온 값을 넣는 것에 주의한다.
 	public int insert(ProductBoardDTO dto) throws Exception {
-		String sql = "insert into board values(?,?,?,?,?,?,?,?,?,?,default)";
+		String sql = "insert into product_board values(?,?,?,?,?,?,?,?,?,?,default)";
 		
 		try (
 		Connection con = getConnection();
@@ -55,7 +55,7 @@ public class ProductBoardDAO {
 	
 	// 게시글 등록시에 첨부파일에 parentSeq (게시글의 등록 예정 번호) 을 전달하기 위해 미리 값을 받는 메서드
 	public int getParentSeq() throws Exception {
-		String sql = "select board_seq.nextval from dual";
+		String sql = "select product_board_seq.nextval from dual";
 		
 		try (
 		Connection con = getConnection();
@@ -68,7 +68,7 @@ public class ProductBoardDAO {
 	
 	// 게시글 목록 출력
 	public List<ProductBoardDTO> getBoardList(int currPage) throws Exception {
-		String sql = "select * from (select row_number() over(order by seq desc) row_num, board.* from board) where row_num between ? and ?";
+		String sql = "select * from (select row_number() over(order by seq desc) row_num, product_board.* from product_board) where row_num between ? and ?";
 		
 		try (
 		Connection con = getConnection();
@@ -91,7 +91,7 @@ public class ProductBoardDAO {
 	
 	// 총 네비 페이지 수 얻기
 	public int getTotalPage() throws Exception {
-		String sql = "select count(*) from board";
+		String sql = "select count(*) from product_board";
 		
 		try (
 		Connection con = getConnection();
@@ -104,7 +104,7 @@ public class ProductBoardDAO {
 	
 	// 게시글 상세내용 출력
 	public ProductBoardDTO getBoardDetail(int seq) throws Exception {
-		String sql = "select * from board where seq=?";
+		String sql = "select * from product_board where seq=?";
 		
 		try (
 		Connection con = getConnection();
@@ -122,7 +122,7 @@ public class ProductBoardDAO {
 	
 	// 게시글 조회수 증가
 	public int updateViewCount(int seq) throws Exception {
-		String sql = "update board set viewCount = viewCount+1 where seq=?";
+		String sql = "update product_board set viewCount = viewCount+1 where seq=?";
 		
 		try (
 		Connection con = getConnection();
@@ -136,7 +136,7 @@ public class ProductBoardDAO {
 	
 	// 게시글 삭제
 	public int delete(int seq) throws Exception {
-		String sql = "delete from board where seq=?";
+		String sql = "delete from product_board where seq=?";
 		
 		try (
 		Connection con = getConnection();
@@ -150,7 +150,7 @@ public class ProductBoardDAO {
 	
 	// 게시글 수정
 	public int update(ProductBoardDTO dto) throws Exception {
-		String sql = "update board set title=?, contents=?, pname=?, price=?, category=?, sellingOption=? where seq=?";
+		String sql = "update product_board set title=?, contents=?, pname=?, price=?, category=?, sellingOption=? where seq=?";
 		
 		try (
 		Connection con = getConnection();
@@ -170,7 +170,7 @@ public class ProductBoardDAO {
 	
 	// 게시글 거래상태 변경
 	public int updateStatus(String Status, int seq) throws Exception {
-		String sql = "update board set sellingOption=? where seq=?";
+		String sql = "update product_board set sellingOption=? where seq=?";
 		
 		try (
 		Connection con = getConnection();
@@ -185,7 +185,7 @@ public class ProductBoardDAO {
 	
 	// 무한스크롤 이미지정보 가져오기
 	public List<String> getScrollImage() throws Exception {
-		String sql = "select sysName from image where seq in (select max(seq) from image group by parentSeq) order by parentSeq desc";
+		String sql = "select sysName from product_image where seq in (select max(seq) from product_image group by parentSeq) order by parentSeq desc";
 		
 		try (
 		Connection con = getConnection();
@@ -203,7 +203,7 @@ public class ProductBoardDAO {
 	
 	// 무한스크롤 게시글정보 가져오기
 	public List<ProductBoardDTO> getBoardAll() throws Exception {
-		String sql = "select * from board order by seq desc";
+		String sql = "select * from product_board order by seq desc";
 		
 		try (
 		Connection con = getConnection();

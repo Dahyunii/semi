@@ -14,9 +14,14 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import dao.MultichatDAO;
+import dto.MultichatDTO;
+
 @ServerEndpoint("/multi.chat")
 public class MultiChatController {
-
+	
+	MultichatDAO dao = MultichatDAO.getInstance();
+	
 	private static List<Session> sessionUsers = Collections.synchronizedList(new ArrayList<>());
 	private static Pattern pattern = Pattern.compile("^\\{\\{.*?\\}\\}");
 
@@ -38,8 +43,14 @@ public class MultiChatController {
 
 		final String msg = message.replaceAll(pattern.pattern(), "");
 		final String username = name.replaceFirst("^\\{\\{", "").replaceFirst("\\}\\}$", "");
-		System.out.println(message);
 
+		// multichat 테이블에 저장
+		try {
+		int result = dao.insert(new MultichatDTO(0, username, msg));
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 		sessionUsers.forEach(session -> {
 			// 리스트에 있는 세션과 메시지를 보낸 세션이 같으면 메시지 송신할 필요없다.
 			if (session == userSession) {

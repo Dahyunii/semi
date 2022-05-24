@@ -32,7 +32,7 @@ public class ProductImageDAO {
 	
 	// 이미지 정보 입력
 	public int insert(ProductImageDTO dto) throws Exception {
-		String sql = "insert into image values(image_seq.nextval,?,?,?)";
+		String sql = "insert into product_image values(product_image_seq.nextval,?,?,?)";
 		
 		try (
 		Connection con = getConnection();
@@ -48,7 +48,7 @@ public class ProductImageDAO {
 	
 	// 이미지 정보 출력
 	public List<ProductImageDTO> getImageList(int parentSeq) throws Exception {
-		String sql = "select * from image where parentSeq=? order by seq";
+		String sql = "select * from product_image where parentSeq=? order by seq";
 		
 		try (
 		Connection con = getConnection();
@@ -68,7 +68,7 @@ public class ProductImageDAO {
 	
 	// 이미지 정보 삭제
 	public int delete(int seq) throws Exception {
-		String sql = "delete from image where seq=?";
+		String sql = "delete from product_image where seq=?";
 		
 		try (
 		Connection con = getConnection();
@@ -82,7 +82,7 @@ public class ProductImageDAO {
 	
 	// 특정 게시굴 이미지 정보 전부 삭제
 	public int deleteAll(int parentSeq) throws Exception {
-		String sql = "delete from image where parentSeq=?";
+		String sql = "delete from product_image where parentSeq=?";
 		
 		try (
 		Connection con = getConnection();
@@ -96,7 +96,7 @@ public class ProductImageDAO {
 	
 	// 이미지 정보 수정
 	public int update(ProductImageDTO dto) throws Exception {
-		String sql = "update image set oriName=?, sysName=? where seq=?";
+		String sql = "update product_image set oriName=?, sysName=? where seq=?";
 		
 		try (
 		Connection con = getConnection();

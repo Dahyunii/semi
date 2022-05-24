@@ -1,6 +1,7 @@
 package controllers;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,7 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 
 import dao.MemberDAO;
+import dao.MultichatDAO;
 import dto.MemberDTO;
+import dto.MultichatDTO;
 import utils.EncryptUtils;
 
 @WebServlet("*.member")
@@ -22,6 +25,7 @@ public class MemberController extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		String uri = request.getRequestURI();
 		MemberDAO dao = MemberDAO.getInstance();
+		MultichatDAO dao2 = MultichatDAO.getInstance();
 		Gson g = new Gson();
 		
 		try {
@@ -62,9 +66,14 @@ public class MemberController extends HttpServlet {
 			
 			boolean result = dao.isLoginOk(id, pw);
 			
+			// 다중채팅창에 최근 100개 채팅을 띄우기 위해 리스트 받아오기
+			List<MultichatDTO> list = dao2.getMultichatList();
+			System.out.println(list.size());
+			
 			if(result) {
 				request.getSession().setAttribute("isLoginOk", 1);
 				request.getSession().setAttribute("loginId", id);
+				request.getSession().setAttribute("multichatList", list);
 				
 			} else {
 				request.getSession().setAttribute("isLoginOk", 0);

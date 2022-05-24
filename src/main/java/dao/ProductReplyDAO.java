@@ -32,7 +32,7 @@ public class ProductReplyDAO {
 	
 	// 댓글 등록
 	public int insert(ProductReplyDTO dto) throws Exception {
-		String sql = "insert into reply values(reply_seq.nextval,?,?,?,default)";
+		String sql = "insert into product_reply values(product_reply_seq.nextval,?,?,?,default)";
 		
 		try (
 		Connection con = getConnection();
@@ -48,7 +48,7 @@ public class ProductReplyDAO {
 	
 	// 댓글 출력
 	public List<ProductReplyDTO> getReplyList(int parentSeq) throws Exception {
-		String sql = "select * from reply where parentSeq=? order by seq";
+		String sql = "select * from product_reply where parentSeq=? order by seq";
 		
 		try (
 		Connection con = getConnection();
@@ -68,7 +68,7 @@ public class ProductReplyDAO {
 	
 	// 댓글 삭제
 	public int delete(int seq) throws Exception {
-		String sql = "delete from reply where seq=?";
+		String sql = "delete from product_reply where seq=?";
 		
 		try (
 		Connection con = getConnection();
@@ -82,7 +82,7 @@ public class ProductReplyDAO {
 	
 	// 댓글 수정
 	public int update(int seq, String contents) throws Exception {
-		String sql = "update reply set contents=?, writeDate=default where seq=?";
+		String sql = "update product_reply set contents=?, writeDate=default where seq=?";
 		
 		try (
 		Connection con = getConnection();
